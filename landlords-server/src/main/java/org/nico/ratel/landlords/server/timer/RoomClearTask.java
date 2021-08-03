@@ -56,6 +56,7 @@ public class RoomClearTask extends TimerTask {
             if (alreadyLiveTime > liveTime) {
                 SimplePrinter.serverLog("room " + room.getId() + " live time overflow " + liveTime + ", closed!");
                 ServerEventListener.get(ServerEventCode.CODE_CLIENT_EXIT).call(room.getClientSideList().get(0), null);
+                ServerContains.removeRoom(room.getId());
                 continue;
             }
 
@@ -63,6 +64,7 @@ public class RoomClearTask extends TimerTask {
             if (room.getStatus() != RoomStatus.STARTING && diff > waitingStatusInterval) {
                 SimplePrinter.serverLog("room " + room.getId() + " starting waiting time overflow " + waitingStatusInterval + ", closed!");
                 ServerEventListener.get(ServerEventCode.CODE_CLIENT_EXIT).call(room.getClientSideList().get(0), null);
+				ServerContains.removeRoom(room.getId());
 				continue;
             }
 			if (room.getType() != RoomType.PVP) {
@@ -86,6 +88,7 @@ public class RoomClearTask extends TimerTask {
 			if (allRobots) {
 				SimplePrinter.serverLog("room " + room.getId() + " all is robots, closed!");
 				ServerEventListener.get(ServerEventCode.CODE_CLIENT_EXIT).call(currentPlayer, null);
+				ServerContains.removeRoom(room.getId());
 				continue;
 			}
             //kick this client
